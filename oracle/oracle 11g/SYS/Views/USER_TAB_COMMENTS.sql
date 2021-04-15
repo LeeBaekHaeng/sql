@@ -1,0 +1,7 @@
+SELECT /*  */
+       A.*
+  FROM USER_TAB_COMMENTS A
+ WHERE 1 = 1
+--   AND A.OWNER = 'SYS'
+--   AND A.VIEW_NAME LIKE 'DBA_TA%'
+;
