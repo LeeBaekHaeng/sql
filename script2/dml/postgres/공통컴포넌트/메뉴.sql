@@ -9,18 +9,6 @@ select * from COMTNMENUINFO where menu_no = 0
 
 --https://www.postgresql.org/docs/current/queries-with.html
 
-WITH RECURSIVE included_parts(sub_part, part, quantity) AS (
-    SELECT sub_part, part, quantity FROM parts WHERE part = 'our_product'
-  UNION ALL
-    SELECT p.sub_part, p.part, p.quantity * pr.quantity
-    FROM included_parts pr, parts p
-    WHERE p.part = pr.sub_part
-)
-SELECT sub_part, SUM(quantity) as total_quantity
-FROM included_parts
-GROUP BY sub_part
-;
-
 WITH RECURSIVE included_parts(
 grp_path
 , depth
@@ -61,4 +49,26 @@ FROM included_parts
 --order by path, menu_ordr
 --order by depth, menu_ordr
 --limit 100
+;
+
+WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu_no, upper_menu_no, menu_ordr, menu_dc, relate_image_path, relate_image_nm) AS (
+    SELECT
+      0
+      , false
+      , ARRAY[a.menu_no::numeric]
+--      , ARRAY[ROW(a.menu_no, a.menu_nm)]
+      , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
+    FROM COMTNMENUINFO a
+  UNION ALL
+    SELECT
+      sg.depth + 1
+      , a.menu_no = ANY(path)
+--      , ROW(a.menu_no, g.f2) = ANY(path)
+      , path || a.menu_no
+--      , path || ROW(a.menu_no, g.menu_nm)
+      , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
+    FROM COMTNMENUINFO a, search_graph sg
+    WHERE a.menu_no = sg.upper_menu_no AND NOT is_cycle
+)
+SELECT * FROM search_graph
 ;
