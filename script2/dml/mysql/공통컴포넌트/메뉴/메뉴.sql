@@ -1,24 +1,38 @@
-SELECT
+ï»¿SELECT
     a.*
-FROM comtnmenuinfo a /* ¸Ş´ºÁ¤º¸ */
+FROM comtnmenuinfo a /* ë©”ë‰´ì •ë³´ */
 ;
 
 SELECT
     COUNT(*)
-FROM comtnmenuinfo a /* ¸Ş´ºÁ¤º¸ */
+FROM comtnmenuinfo a /* ë©”ë‰´ì •ë³´ */
 ;
 
 SELECT
     a.*
-FROM comtnmenuinfo a /* ¸Ş´ºÁ¤º¸ */
+FROM comtnmenuinfo a /* ë©”ë‰´ì •ë³´ */
 WHERE 1 = 1
---     AND a.menu_no = 0 /* ¸Ş´º¹øÈ£*/
+--     AND a.menu_no = 0 /* ë©”ë‰´ë²ˆí˜¸*/
 -- 
---     AND a.menu_no = 1 /* ¸Ş´º¹øÈ£*/
---     AND a.menu_no = 2 /* ¸Ş´º¹øÈ£*/
-    AND a.menu_no IN (1, 2) /* ¸Ş´º¹øÈ£*/
+--     AND a.menu_no = 1 /* ë©”ë‰´ë²ˆí˜¸*/
+--     AND a.menu_no = 2 /* ë©”ë‰´ë²ˆí˜¸*/
+    AND a.menu_no IN (1, 2) /* ë©”ë‰´ë²ˆí˜¸*/
 -- 
---     AND a.upper_menu_no = 1 /* »óÀ§¸Ş´º¹øÈ£*/
---     AND a.upper_menu_no = 2 /* »óÀ§¸Ş´º¹øÈ£*/
-    AND a.upper_menu_no IN (1, 2) /* »óÀ§¸Ş´º¹øÈ£*/
+--     AND a.upper_menu_no = 1 /* ìƒìœ„ë©”ë‰´ë²ˆí˜¸*/
+--     AND a.upper_menu_no = 2 /* ìƒìœ„ë©”ë‰´ë²ˆí˜¸*/
+    AND a.upper_menu_no IN (1, 2) /* ìƒìœ„ë©”ë‰´ë²ˆí˜¸*/
 ;
+
+WITH RECURSIVE RecursiveHierarchy AS (
+  SELECT id, name, parent_id
+  FROM your_table
+  WHERE id = 1 -- ìµœìƒìœ„ ë…¸ë“œ ID
+
+  UNION ALL
+
+  SELECT t.id, t.name, t.parent_id
+  FROM your_table t
+  INNER JOIN RecursiveHierarchy r ON t.parent_id = r.id
+)
+SELECT id, name
+FROM RecursiveHierarchy;
