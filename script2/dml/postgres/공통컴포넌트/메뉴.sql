@@ -55,10 +55,11 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
     SELECT
       0
       , false
-      , ARRAY[a.menu_no::numeric]
+      , ARRAY[a.menu_no :: numeric]
 --      , ARRAY[ROW(a.menu_no, a.menu_nm)]
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM COMTNMENUINFO a
+    WHERE a.menu_no = 0
   UNION ALL
     SELECT
       sg.depth + 1
@@ -68,7 +69,8 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
 --      , path || ROW(a.menu_no, g.menu_nm)
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM COMTNMENUINFO a, search_graph sg
-    WHERE a.menu_no = sg.upper_menu_no AND NOT is_cycle
+    WHERE a.upper_menu_no = sg.menu_no AND NOT is_cycle
+    AND a.menu_no > 0
 )
 SELECT * FROM search_graph
 ;
