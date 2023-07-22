@@ -47,7 +47,9 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
       0
       , false
 --       , ARRAY[ROW(a.menu_no, a.menu_nm)]
-      , CONCAT(a.menu_no, '')
+--       , CONCAT(a.menu_ordr, '')
+--       , CONCAT(LPAD(a.menu_ordr, 2, '0'), '')
+      , CAST(CONCAT(LPAD(a.menu_ordr, 3, '0'), '') AS VARCHAR(999))
 --       , a.menu_no
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM comtnmenuinfo a
@@ -59,7 +61,9 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
 --       , path || ROW(a.menu_no, a.menu_nm)
       , NULL
 --       , NULL
-       , CONCAT(sg.path, ',', a.menu_no)
+--       , sg.path
+--       , CONCAT(sg.path, ',', a.menu_ordr)
+      , CONCAT(sg.path, ',', LPAD(a.menu_ordr, 3, '0'))
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM comtnmenuinfo a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no
@@ -68,13 +72,5 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
     AND a.menu_no > sg.menu_no
 )
 SELECT * FROM search_graph
-ORDER BY path, menu_ordr
-;
-
-WITH RECURSIVE bus_dst as ( 
-    SELECT origin as dst FROM bus_routes WHERE origin='New York' 
-  UNION
-    SELECT bus_routes.dst FROM bus_routes JOIN bus_dst ON bus_dst.dst= bus_routes.origin 
-) 
-SELECT * FROM bus_dst
+ORDER BY path
 ;
