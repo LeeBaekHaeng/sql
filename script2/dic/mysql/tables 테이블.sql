@@ -19,7 +19,7 @@ order by a.table_name /* 테이블 이름 */
 
 /* 테이블 select */
 select
-    CONCAT('SELECT * FROM ', a.table_name, 'a /* ', a.table_comment, ' */ where 1 = 1;')
+    CONCAT('SELECT a.* FROM ', a.table_name, ' a /* ', a.table_comment, ' */ where 1 = 1;')
 FROM information_schema.tables a/* 테이블 */
 WHERE 1 = 1
     AND a.table_schema = 'com' /* 테이블 스키마 */
