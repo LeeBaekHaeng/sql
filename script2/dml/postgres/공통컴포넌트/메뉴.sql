@@ -1,10 +1,11 @@
-select * from COMTNMENUINFO
+SELECT * FROM comtnmenuinfo
+ORDER BY menu_no
 ;
 
-select count(*) from COMTNMENUINFO
+SELECT COUNT(*) FROM comtnmenuinfo
 ;
 
-select * from COMTNMENUINFO where menu_no = 0
+SELECT * FROM comtnmenuinfo WHERE menu_no = 0
 ;
 
 --https://www.postgresql.org/docs/current/queries-with.html
@@ -13,13 +14,13 @@ WITH RECURSIVE search_graph(depth, menu_nm, progrm_file_nm, menu_no, upper_menu_
     SELECT
       0
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a
+    FROM comtnmenuinfo a
     WHERE a.menu_no = 0
   UNION ALL
     SELECT
       sg.depth + 1
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a, search_graph sg
+    FROM comtnmenuinfo a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no
     AND a.menu_no > 0
 )
@@ -32,7 +33,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
       , false
       , ARRAY[a.menu_no :: numeric]
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a
+    FROM comtnmenuinfo a
     WHERE a.menu_no = 0
   UNION ALL
     SELECT
@@ -40,7 +41,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
       , a.menu_no = ANY(path)
       , path || a.menu_no
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a, search_graph sg
+    FROM comtnmenuinfo a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no AND NOT is_cycle
     AND a.menu_no > 0
 )
@@ -53,7 +54,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
       , false
       , ARRAY[ROW(a.menu_no, a.menu_nm)]
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a
+    FROM comtnmenuinfo a
     WHERE a.menu_no = 0
   UNION ALL
     SELECT
@@ -61,7 +62,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
       , ROW(a.menu_no, a.menu_nm) = ANY(path)
       , path || ROW(a.menu_no, a.menu_nm)
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a, search_graph sg
+    FROM comtnmenuinfo a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no AND NOT is_cycle
     AND a.menu_no > 0
 )
