@@ -49,7 +49,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
 --       , ARRAY[ROW(a.menu_no, a.menu_nm)]
 --       , CONCAT(a.menu_ordr, '')
 --       , CONCAT(LPAD(a.menu_ordr, 2, '0'), '')
-      , CAST(CONCAT(LPAD(a.menu_ordr, 3, '0'), '') AS VARCHAR(999))
+      , CAST(LPAD(a.menu_ordr, 3, '0') AS VARCHAR(999))
 --       , a.menu_no
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM comtnmenuinfo a
