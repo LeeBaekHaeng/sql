@@ -29,13 +29,13 @@ WITH RECURSIVE search_graph(depth, menu_nm, progrm_file_nm, menu_no, upper_menu_
     SELECT
       0
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a
+    FROM comtnmenuinfo a
     WHERE a.menu_no = 0
   UNION ALL
     SELECT
       sg.depth + 1
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a, search_graph sg
+    FROM comtnmenuinfo a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no
     AND a.menu_no > 0
 )
@@ -47,9 +47,9 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
       0
       , false
 --       , ARRAY[ROW(a.menu_no, a.menu_nm)]
-      , CONCAT(a.menu_ordr, ',', a.menu_no, ',')
+      , CONCAT(a.menu_no, ',')
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a
+    FROM comtnmenuinfo a
     WHERE a.menu_no = 0
   UNION ALL
     SELECT
@@ -58,9 +58,9 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
 --       , path || ROW(a.menu_no, a.menu_nm)
       , NULL
 --       , NULL
-      , CONCAT(a.menu_ordr, ',', sg.menu_no, ',', a.menu_no)
+       , CONCAT(sg.menu_no, ',', a.menu_no)
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
-    FROM COMTNMENUINFO a, search_graph sg
+    FROM comtnmenuinfo a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no
 --     AND NOT is_cycle
 --     AND LOCATE(a.menu_no, sg.menu_no) = 0
@@ -68,4 +68,12 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
 )
 SELECT * FROM search_graph
 ORDER BY path
+;
+
+WITH RECURSIVE bus_dst as ( 
+    SELECT origin as dst FROM bus_routes WHERE origin='New York' 
+  UNION
+    SELECT bus_routes.dst FROM bus_routes JOIN bus_dst ON bus_dst.dst= bus_routes.origin 
+) 
+SELECT * FROM bus_dst
 ;
