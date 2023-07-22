@@ -47,7 +47,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
       0
       , false
 --       , ARRAY[ROW(a.menu_no, a.menu_nm)]
-      , CONCAT(a.menu_no, ',')
+      , CONCAT(a.menu_ordr, ',', a.menu_no, ',')
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM COMTNMENUINFO a
     WHERE a.menu_no = 0
@@ -58,13 +58,14 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
 --       , path || ROW(a.menu_no, a.menu_nm)
       , NULL
 --       , NULL
-      , CONCAT(sg.menu_no, ',', a.menu_no)
+      , CONCAT(a.menu_ordr, ',', sg.menu_no, ',', a.menu_no)
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM COMTNMENUINFO a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no
 --     AND NOT is_cycle
-    AND LOCATE(a.menu_no, sg.menu_no) = 0
+--     AND LOCATE(a.menu_no, sg.menu_no) = 0
     AND a.menu_no > 0
 )
 SELECT * FROM search_graph
+ORDER BY path
 ;
