@@ -53,7 +53,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
     SELECT
       0
       , false
-      , ARRAY[ROW(a.menu_no, a.menu_nm)]
+      , ARRAY[ROW(a.menu_ordr, a.menu_no, a.menu_nm)]
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM comtnmenuinfo a
     WHERE a.menu_no = 0
@@ -61,7 +61,7 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
     SELECT
       sg.depth + 1
       , ROW(a.menu_no, a.menu_nm) = ANY(path)
-      , path || ROW(a.menu_no, a.menu_nm)
+      , path || ROW(a.menu_ordr, a.menu_no, a.menu_nm)
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM comtnmenuinfo a, search_graph sg
     WHERE a.upper_menu_no = sg.menu_no AND NOT is_cycle
