@@ -67,4 +67,5 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, menu_nm, progrm_file_nm, menu
     AND a.menu_no > 0
 )
 SELECT * FROM search_graph
+ORDER BY path
 ;
