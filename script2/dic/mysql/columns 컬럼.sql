@@ -7,8 +7,17 @@ https://mariadb.com/kb/en/information-schema-columns-table/
 **/
 
 SELECT
-    a.*
+    a.table_schema '테이블 스키마'
+    , a.column_name '컬럼 이름'
+    , a.column_comment '컬럼 설명'
+    , a.*
 FROM information_schema.columns a/* 컬럼 */
+WHERE 1 = 1
+    AND a.table_schema = 'com'
+    AND a.column_comment LIKE '%순서%' /* 컬럼 설명 */
+ORDER BY a.table_schema /* 테이블 스키마 */
+    , a.table_name /* 테이블 이름 */
+    , a.ordinal_position /* 서수 위치 */
 ;
 
 /* 컬럼 */
