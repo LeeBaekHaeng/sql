@@ -51,6 +51,10 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, path2, menu_nm, progrm_file_n
       , a.menu_nm, a.progrm_file_nm, a.menu_no, a.upper_menu_no, a.menu_ordr, a.menu_dc, a.relate_image_path, a.relate_image_nm
     FROM comtnmenuinfo a
     WHERE a.menu_no = 0
+--     WHERE a.menu_no = 1
+--     WHERE a.menu_no = 2
+--     WHERE a.menu_no = 3
+--     WHERE a.menu_no = 31
   UNION ALL
     SELECT
       sg.depth + 1
@@ -64,4 +68,9 @@ WITH RECURSIVE search_graph(depth, is_cycle, path, path2, menu_nm, progrm_file_n
 )
 SELECT * FROM search_graph
 ORDER BY path
+;
+
+select
+    a.*
+FROM comtnmenucreatdtls a /* 메뉴생성내역 */
 ;
