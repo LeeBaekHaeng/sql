@@ -4,7 +4,7 @@
 
 CREATE
 OR REPLACE
-FUNCTION fn_get_code_nm (
+FUNCTION fn_egov_get_code_nm (
     in_code_id VARCHAR(6)
     , in_code VARCHAR(15)
 )
@@ -34,5 +34,5 @@ $$ LANGUAGE plpgsql
 
 
 SELECT
-    fn_get_code_nm('COM001', 'REGC01') code_nm
+    fn_egov_get_code_nm('COM001', 'REGC01') code_nm
 ;
