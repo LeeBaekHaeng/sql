@@ -41,6 +41,7 @@ WHERE g.menu_no = 0
 --    WHERE g.menu_no = sg.upper_menu_no AND NOT is_cycle
     WHERE g.upper_menu_no = sg.menu_no AND NOT is_cycle
 and g.menu_no > 0
+and g.menu_no >= 101000000
 )
 SELECT * FROM search_graph a
 left outer join COMTNPROGRMLIST b /* 프로그램목록 */ on b.progrm_file_nm = a.progrm_file_nm
