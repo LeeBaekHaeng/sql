@@ -8,6 +8,8 @@
 --43.5.4. Executing Dynamic Commands
 --https://www.postgresql.org/docs/current/plpgsql-statements.html#PLPGSQL-STATEMENTS-EXECUTING-DYN
 
+--일반회원
+
 CREATE
 OR REPLACE
 FUNCTION fn_egov_get_com_tn_gnrl_mber(
