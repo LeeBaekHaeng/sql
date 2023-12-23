@@ -7,15 +7,30 @@ Chapter 53. System Catalogs
 */
 
 SELECT /* DAO.selectList 조회(멀티건) */
-       ROW_NUMBER() OVER() RN 
+       ROW_NUMBER() OVER() RN
+/*  */
+     , A.TABLE_NAME
+     , UPPER(A.TABLE_NAME) TABLE_UC_NAME /** ucName Upper Case 명 */
+     , LOWER(A.TABLE_NAME) TABLE_LC_NAME /** lcName Lower Case 명 */
+     , SUBSTRING(A.TABLE_NAME, 1, 1) || SUBSTRING(REPLACE(INITCAP(A.TABLE_NAME), '_', ''), 2) TABLE_CC_NAME /** ccName Camel Lower Case 명 */
+     , REPLACE(INITCAP(A.TABLE_NAME), '_', '') TABLE_PC_NAME /** pcName Pascal Lower Case 명 */
+/*  */
+     , A.COLUMN_NAME
+     , UPPER(A.COLUMN_NAME) COLUMN_UC_NAME /** ucName Upper Case 명 */
+     , LOWER(A.COLUMN_NAME) COLUMN_LC_NAME /** lcName Lower Case 명 */
+     , SUBSTRING(A.COLUMN_NAME, 1, 1) || SUBSTRING(REPLACE(INITCAP(A.COLUMN_NAME), '_', ''), 2) COLUMN_CC_NAME /** ccName Camel Lower Case 명 */
+     , REPLACE(INITCAP(A.COLUMN_NAME), '_', '') COLUMN_PC_NAME /** pcName Pascal Lower Case 명 */
+/*  */
      , COL_DESCRIPTION(A.TABLE_NAME::REGCLASS::OID, 0) TABLE_COMMENTS
      , COL_DESCRIPTION(A.TABLE_NAME::REGCLASS::OID, A.ORDINAL_POSITION) COLUMN_COMMENTS
+/*  */
      , A.*
   FROM INFORMATION_SCHEMA.COLUMNS A
  WHERE 1 = 1
 --   AND A.TABLE_CATALOG = 'db_com'
 --   AND A.TABLE_SCHEMA = 'sc_com'
-   AND A.TABLE_NAME = 'comtngnrlmber'
+--   AND A.TABLE_NAME = 'comtngnrlmber'
+   AND A.TABLE_NAME LIKE 'com%'
  ORDER BY 
        A.TABLE_CATALOG, A.TABLE_SCHEMA, A.TABLE_NAME, A.ORDINAL_POSITION
 ;
