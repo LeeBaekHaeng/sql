@@ -3,6 +3,7 @@
 --https://www.postgresql.org/docs/current/information-schema.html
 
 --테이블/뷰/함수/시퀀스 권한 조회
+--01.테이블/02.뷰/03.함수/04.시퀀스 권한 조회
 
 -- 컬럼 권한 조회
 --37.35. role_column_grants
@@ -22,7 +23,10 @@ order by specific_catalog, specific_schema, specific_name
 
 -- 테이블 권한 조회
 --37.37. role_table_grants
-SELECT * FROM INFORMATION_SCHEMA.ROLE_TABLE_GRANTS
+SELECT
+'REVOKE ALL ON TABLE ' || table_schema || '.' || table_name || ' FROM ' || grantee || ';' REVOKE_TABLE /* 테이블 권한 취소 */
+, A.*
+FROM INFORMATION_SCHEMA.ROLE_TABLE_GRANTS A
 where 1 = 1
 and table_schema like 'sc_%'
 and grantee = 'postgres'
