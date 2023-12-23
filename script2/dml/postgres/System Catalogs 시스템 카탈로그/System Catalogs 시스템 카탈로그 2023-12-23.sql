@@ -28,7 +28,7 @@ SELECT /* DAO.selectList 조회(멀티건) */
 
 SELECT /* DAO.selectList 조회(멀티건) */
        ROW_NUMBER() OVER() RN
---     , 'ALTER TABLE ' || A.SCHEMANAME || '.' || A.VIEWNAME || ' OWNER TO us_comobj;' ALTER_TABLE_OWNER
+     , 'ALTER TABLE ' || A.SCHEMANAME || '.' || A.VIEWNAME || ' OWNER TO us_comobj;' ALTER_TABLE_OWNER
      , A.*
   FROM PG_VIEWS A
  WHERE 1 = 1
@@ -48,4 +48,30 @@ SELECT /* DAO.selectList 조회(멀티건) */
        A.VIEWOWNER
  ORDER BY
        A.VIEWOWNER
+;
+
+/* 함수 */
+
+SELECT /* DAO.selectList 조회(멀티건) */
+       ROW_NUMBER() OVER() RN
+--     , 'ALTER FUNCTION ' || A.PROOWNER || '.' || A.PRONAME || ' OWNER TO us_comobj;' ALTER_TABLE_OWNER
+     , A.*
+  FROM PG_PROC A
+ WHERE 1 = 1
+   AND A.PRONAME LIKE 'fn_%'
+ ORDER BY
+       A.PROOWNER, A.PRONAME
+;
+
+SELECT /* DAO.selectList 조회(멀티건) */
+       ROW_NUMBER() OVER() RN
+     , A.PROOWNER
+     , COUNT(A.*)
+  FROM PG_PROC A
+ WHERE 1 = 1
+   AND A.PRONAME LIKE 'fn_%'
+ GROUP BY
+       A.PROOWNER
+ ORDER BY
+       A.PROOWNER
 ;
