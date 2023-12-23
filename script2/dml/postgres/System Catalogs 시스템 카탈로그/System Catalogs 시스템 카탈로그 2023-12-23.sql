@@ -24,4 +24,28 @@ SELECT /* DAO.selectList 조회(멀티건) */
        A.TABLEOWNER
 ;
 
-/* 테이블 */
+/* 뷰 */
+
+SELECT /* DAO.selectList 조회(멀티건) */
+       ROW_NUMBER() OVER() RN
+--     , 'ALTER TABLE ' || A.SCHEMANAME || '.' || A.VIEWNAME || ' OWNER TO us_comobj;' ALTER_TABLE_OWNER
+     , A.*
+  FROM PG_VIEWS A
+ WHERE 1 = 1
+   AND A.SCHEMANAME LIKE 'sc_%'
+ ORDER BY
+       A.SCHEMANAME, A.VIEWNAME
+;
+
+SELECT /* DAO.selectList 조회(멀티건) */
+       ROW_NUMBER() OVER() RN
+     , A.VIEWOWNER
+     , COUNT(A.*)
+  FROM PG_VIEWS A
+ WHERE 1 = 1
+   AND A.SCHEMANAME LIKE 'sc_%'
+ GROUP BY
+       A.VIEWOWNER
+ ORDER BY
+       A.VIEWOWNER
+;
